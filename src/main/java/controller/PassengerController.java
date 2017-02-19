@@ -2,6 +2,7 @@ package controller;
 
 
 import domain.Passenger;
+import exceptions.NonExistentPassengerException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import service.PassengerService;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class PassengerController {
@@ -19,9 +21,8 @@ public class PassengerController {
 
 	@RequestMapping(path="passengers", method = RequestMethod.GET)
 	@ResponseBody
-	public String requestMapping() {
-		passengerService.savePassenger(new Passenger("Egor", "Maiorov"));
-		return "[]";
+	public ResponseEntity<List<Passenger>> requestMapping() {
+		return new ResponseEntity<List<Passenger>>(passengerService.findAll(), HttpStatus.OK);
 	}
 
 
@@ -39,8 +40,9 @@ public class PassengerController {
 	}
 
 	@RequestMapping(path = "passengers/{id}", method = RequestMethod.GET)
-	public ResponseEntity getPassenger(@PathVariable("id")String passengderId) {
-		Passenger passenger = passengerService.retrievePassengerById(Long.valueOf(passengderId));
+	@ResponseBody
+	public ResponseEntity<Passenger> getPassenger(@PathVariable("id")String passengerId) {
+		Passenger passenger = passengerService.retrievePassengerById(Long.valueOf(passengerId));
 
 		if (passenger != null) {
 			return new ResponseEntity(passenger,HttpStatus.OK);
@@ -48,4 +50,30 @@ public class PassengerController {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 	}
+
+	@RequestMapping(path = "passengers/{id}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public ResponseEntity deletePassenger(@PathVariable("id")String passengerId) {
+		try {
+			passengerService.removePassenger(Long.valueOf(passengerId));
+		} catch (NonExistentPassengerException ex) {
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity(HttpStatus.NO_CONTENT);
+	}
+
+
+	@RequestMapping(path = "passengers/{id}", method = RequestMethod.PUT)
+	@ResponseBody
+	public ResponseEntity updatePassenger(@PathVariable("id") String passengerId, @RequestBody Passenger passenger) {
+		try {
+			passengerService.updatePassenger(Long.valueOf(passengerId), passenger);
+		} catch (NonExistentPassengerException ex) {
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity(HttpStatus.NO_CONTENT);
+	}
+
 }
