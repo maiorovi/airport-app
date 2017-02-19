@@ -3,6 +3,7 @@ package controller;
 
 import domain.Passenger;
 import exceptions.NonExistentPassengerException;
+import exceptions.PassengerUpdateNotAllowedException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,6 +72,8 @@ public class PassengerController {
 			passengerService.updatePassenger(Long.valueOf(passengerId), passenger);
 		} catch (NonExistentPassengerException ex) {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		} catch (PassengerUpdateNotAllowedException ex) {
+			return new ResponseEntity(HttpStatus.CONFLICT);
 		}
 
 		return new ResponseEntity(HttpStatus.NO_CONTENT);

@@ -2,13 +2,16 @@ package service;
 
 import domain.Passenger;
 import exceptions.NonExistentPassengerException;
+import exceptions.PassengerUpdateNotAllowedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import repository.PassengerRepository;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class PassengerService {
 	@Autowired
 	private PassengerRepository passengerRepository;
@@ -37,6 +40,9 @@ public class PassengerService {
 
 	public void updatePassenger(Long id, Passenger newPassenger) {
 		Passenger passenger = passengerRepository.findById(id);
+		if (!isUpdateAllowed(passenger)) {
+			throw new PassengerUpdateNotAllowedException();
+		}
 
 		if (passenger == null) {
 			throw new NonExistentPassengerException();
@@ -50,5 +56,9 @@ public class PassengerService {
 
 	public List<Passenger> findAll() {
 		return passengerRepository.findAll();
+	}
+
+	public boolean isUpdateAllowed(Passenger passenger) {
+		return true;
 	}
 }
