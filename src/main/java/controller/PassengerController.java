@@ -2,7 +2,7 @@ package controller;
 
 
 import domain.Passenger;
-import exceptions.NonExistentPassengerException;
+import exceptions.EntityNotFoundException;
 import exceptions.PassengerUpdateNotAllowedException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class PassengerController {
 	public ResponseEntity deletePassenger(@PathVariable("id")String passengerId) {
 		try {
 			passengerService.removePassenger(Long.valueOf(passengerId));
-		} catch (NonExistentPassengerException ex) {
+		} catch (EntityNotFoundException ex) {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 
@@ -70,7 +70,7 @@ public class PassengerController {
 	public ResponseEntity updatePassenger(@PathVariable("id") String passengerId, @RequestBody Passenger passenger) {
 		try {
 			passengerService.updatePassenger(Long.valueOf(passengerId), passenger);
-		} catch (NonExistentPassengerException ex) {
+		} catch (EntityNotFoundException ex) {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		} catch (PassengerUpdateNotAllowedException ex) {
 			return new ResponseEntity(HttpStatus.CONFLICT);

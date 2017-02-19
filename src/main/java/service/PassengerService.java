@@ -1,7 +1,7 @@
 package service;
 
 import domain.Passenger;
-import exceptions.NonExistentPassengerException;
+import exceptions.EntityNotFoundException;
 import exceptions.PassengerUpdateNotAllowedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class PassengerService {
 		Passenger passenger = passengerRepository.findById(passengerId);
 
 		if (passenger == null) {
-			throw new NonExistentPassengerException();
+			throw new EntityNotFoundException();
 		}
 
 		passengerRepository.delete(passengerId);
@@ -45,7 +45,7 @@ public class PassengerService {
 		}
 
 		if (passenger == null) {
-			throw new NonExistentPassengerException();
+			throw new EntityNotFoundException();
 		}
 
 		passenger.setFirstName(newPassenger.getFirstName());
