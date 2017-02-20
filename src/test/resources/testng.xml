@@ -1,0 +1,12 @@
+<suite name="First Suite" verbose="1" >
+    <test name="First Test" >
+        <classes>
+            <class name="testng_demo.AdderTest" />
+        </classes>
+    </test>
+    <test name="Second Test" >
+        <classes>
+            <class name="testng_demo.AdderTest" />
+        </classes>
+    </test>
+</suite>
