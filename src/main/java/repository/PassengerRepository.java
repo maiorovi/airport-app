@@ -1,7 +1,13 @@
 package repository;
 
 import domain.Passenger;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface PassengerRepository extends CrudRepository<Passenger, Long> {
+import java.util.List;
+
+public interface PassengerRepository extends JpaRepository<Passenger, Long> {
+
+	Passenger findById(Long id);
 }

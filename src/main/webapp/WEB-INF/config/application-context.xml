@@ -48,6 +48,7 @@
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
+
     <tx:annotation-driven/>
 
     <jpa:repositories base-package="repository"/>
