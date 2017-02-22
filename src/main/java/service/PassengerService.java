@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import repository.PassengerRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -26,8 +27,8 @@ public class PassengerService {
 		passengerRepository.save(passenger);
 	}
 
-	public Passenger retrievePassengerById(Long id) {
-		return passengerRepository.findById(id);
+	public Optional<Passenger> retrievePassengerById(Long id) {
+		return Optional.ofNullable(passengerRepository.findById(id));
 	}
 
 	public void removePassenger(Long passengerId) {
