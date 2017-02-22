@@ -24,8 +24,8 @@ public class PassengerController {
 
 	@RequestMapping(path="passengers", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<Passenger>> requestMapping(@RequestParam("start")String start,
-														  @RequestParam("pageSize") String pageSize) {
+	public ResponseEntity<List<Passenger>> requestMapping(@RequestParam(value = "start", required = false)String start,
+														  @RequestParam(value = "pageSize", required = false) String pageSize) {
 		if (start != null && pageSize != null) {
 			PageRequest pageRequest	= new PageRequest(Integer.valueOf(start), Integer.valueOf(pageSize));
 			Page<Passenger> passengerPage = passengerService.findAllUsingPage(pageRequest);
