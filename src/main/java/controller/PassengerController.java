@@ -6,6 +6,8 @@ import exceptions.EntityNotFoundException;
 import exceptions.PassengerUpdateNotAllowedException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,7 +24,15 @@ public class PassengerController {
 
 	@RequestMapping(path="passengers", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<Passenger>> requestMapping() {
+	public ResponseEntity<List<Passenger>> requestMapping(@RequestParam("start")String start,
+														  @RequestParam("pageSize") String pageSize) {
+		if (start != null && pageSize != null) {
+			PageRequest pageRequest	= new PageRequest(Integer.valueOf(start), Integer.valueOf(pageSize));
+			Page<Passenger> passengerPage = passengerService.findAllUsingPage(pageRequest);
+
+			return new ResponseEntity<List<Passenger>>(passengerPage.getContent(), HttpStatus.OK);
+		}
+
 		return new ResponseEntity<List<Passenger>>(passengerService.findAll(), HttpStatus.OK);
 	}
 
